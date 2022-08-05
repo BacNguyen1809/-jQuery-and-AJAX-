@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax Sample</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+  
+
+        .btnDiv {
+            display: flex;
+            flex-direction: row-reverse;
+
+        }
+
+        .btnDiv button {
+            background-color: blue;
+            color: white;
+            cursor: pointer;
+            padding: 5px;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <h1>Lorem ipsum dolor sit.</h1>
+            <p>.... author</p>
+        </div>
+
+
+        <div id="share-buttons">
+            <span class="social-share facebook" style="cursor: pointer;"><img
+                    src="https://simplesharebuttons.com/images/somacro/facebook.png" alt="Facebook" /></span>
+
+        </div>
+
+
+    </div>
+    <div class="btnDiv">
+        <button>New quote</button>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var obj ={};
+
+            setShareLinks();
+
+            $('button').click(function () {
+                $.getJSON("http://quotes.stormconsultancy.co.uk/random.json", function (result) {
+
+                    $.each(result, function (key, value) {
+                        obj[key] = value;
+                        // console.log(key+":" + value);
+                    })
+
+                });
+                document.querySelector('h1').innerHTML = obj.quote;
+                document.querySelector('p').innerText = obj.author;
+            })
+
+            function socialWindow(url) {
+                var left = (screen.width - 570) / 2;
+                var top = (screen.height - 570) / 2;
+                var params = "menubar=no,toolbar=no,status=no,width=570,height=570,top=" + top + ",left=" + left;
+                window.open(url, "NewWindow", params);
+            }
+
+            function setShareLinks() {
+                var pageUrl = encodeURIComponent(document.URL);
+                var tweet = encodeURIComponent($("meta[property='og:description']").attr("content"));
+                $(".social-share.facebook").on("click", function () {
+                    url = "https://www.facebook.com/sharer.php?u=" + pageUrl;
+                    socialWindow(url);
+                });
+
+            }
+
+        });
+    </script>
+
+</body>
+
+</html>
